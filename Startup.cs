@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,9 +21,11 @@ namespace UserManager
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IWebHostEnvironment _appEnv;
+        public Startup(IConfiguration configuration, IWebHostEnvironment appHost)
         {
             Configuration = configuration;
+            _appEnv = appHost;
         }
 
         public IConfiguration Configuration { get; }
@@ -33,7 +36,7 @@ namespace UserManager
 
             services.AddCors();
             services.AddControllers();
-            services.AddDbContext<AppDbContext>();
+            services.AddDbContext<AppDbContext>(options => { options.UseSqlite($"DataSource={_appEnv.WebRootPath}app.db;Cache=Shared"); }); ;
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
             services.AddAuthentication(x =>
             {
@@ -65,10 +68,9 @@ namespace UserManager
         {
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
 
             }
-            app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "UserManager v1"));
             app.UseHttpsRedirection();
