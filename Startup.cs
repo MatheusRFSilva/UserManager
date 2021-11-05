@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using UserManager.Data;
 
 namespace UserManager
 {
@@ -32,6 +33,7 @@ namespace UserManager
 
             services.AddCors();
             services.AddControllers();
+            services.AddDbContext<AppDbContext>();
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
             services.AddAuthentication(x =>
             {
