@@ -64,7 +64,7 @@ namespace UserManager.Controllers
         [Route("user")]
         public async Task<IActionResult> GetUser([FromServices] AppDbContext context)
         {
-            var users = context
+            var users = await context
             .Users
             .AsNoTracking()
             .ToListAsync();

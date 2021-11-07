@@ -10,6 +10,8 @@ namespace UserManager.Data
         {
 
         }
+
+
         public DbSet<User> Users { get; set; }
 
 

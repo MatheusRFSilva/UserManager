@@ -36,7 +36,13 @@ namespace UserManager
 
             services.AddCors();
             services.AddControllers();
-            services.AddDbContext<AppDbContext>(options => { options.UseSqlite($"DataSource={_appEnv.WebRootPath}app.db;Cache=Shared"); }); ;
+            //services.AddDbContext<AppDbContext>(options => { options.UseSqlite($"DataSource={_appEnv.WebRootPath}app.db;Cache=Shared"); }); ;
+            var connectionString = Configuration["dbContextSettings:ConnectionString"];
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseNpgsql(connectionString);
+            }
+);
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
             services.AddAuthentication(x =>
             {
