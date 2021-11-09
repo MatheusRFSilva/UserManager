@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using UserManager.Data;
+using UserManager.Repositories;
 
 namespace UserManager
 {
@@ -39,10 +40,10 @@ namespace UserManager
             //services.AddDbContext<AppDbContext>(options => { options.UseSqlite($"DataSource={_appEnv.WebRootPath}app.db;Cache=Shared"); }); ;
             var connectionString = Configuration["dbContextSettings:ConnectionString"];
             services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseNpgsql(connectionString);
-            }
-);
+                {
+                    options.UseNpgsql(connectionString);
+                }
+            );
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
             services.AddAuthentication(x =>
             {
